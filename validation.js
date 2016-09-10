@@ -1,103 +1,97 @@
-$(document).on("ready",function(){
+function ValidationRule(name, regex) {
+  this.name = name;
+  this.regex = regex
+}
+let validateName = new ValidationRule("name", /^[a-zA-Z ]{2,20}$/);
+let validateDate = new ValidationRule("date", /^\d{4}-[0-1]{1}\d{1}-[0-3]{1}\d{1}$/ );
+let validatePesel = new ValidationRule("pesel", /^([0-9]{2})([0-1]{1})([0-9]{1})([0-3]{1})([0-9]{6})$/);
+let validateDay = new ValidationRule("day");
+let validateNumber = new ValidationRule("number", /^\d+$/);
+let validateRules = [];
 
-  function ValidationRule(name, regex) {
-    this.name = name;
-    this.regex = regex
-  }
-  let validateName = new ValidationRule("name", /^[a-zA-Z ]{2,20}$/);
-  let validateNumber = new ValidationRule("date", /^\d{4}-[0-1]{1}\d{1}-[0-3]{1}\d{1}$/ );
-  let validatePesel = new ValidationRule("pesel", /^([0-9]{2})([0-1]{1})([0-9]{1})([0-3]{1})([0-9]{6})$/);
-  let validateRules = [];
-  console.log(validateName);
-  validateRules.push(validateName)
-  validateRules.push(validateNumber)
-  validateRules.push(validatePesel);
-  console.log(validateRules);
+validateRules.push(validateName)
+validateRules.push(validateDate)
+validateRules.push(validatePesel);
+validateRules.push(validateDay);
+validateRules.push(validateNumber);
 
+let weekDaysPl = [
+  {name: "poniedzialek", number: 1},
+  {name: "wtorek", number: 2},
+  {name: "sroda", number: 3},
+  {name: "czwartek", number: 4},
+  {name: "piatek", number: 5},
+  {name: "sobota", number: 6},
+  {name: "niedziela", number: 7}
+];
+let validationArray = [];
+//
+// let submitForm = document.querySelector("[data-validationForm]");
+// document.querySelector("[data-validationForm]".addEventListener("submit", function(event){
+//   validationArray = findInputsToValidate();
+//   console.log(validationArray);
+//   if(validationArray.length !== 0){
+//     event.preventDefault();
+//   }
+//
+// });
 
-  let submitButton = document.querySelector("[data-submit]");
-  submitButton.addEventListener("click", function(event){
+function validateLibrabry(){
+  validationArray = findInputsToValidate();
+  if(validationArray.length !== 0){
     event.preventDefault();
-    findInputstoValidate();
-    findSelectValidate();
-  });
-
+  }
+}
 // Function which look for inputs elements to validate
-function findInputstoValidate(){
+function findInputsToValidate(){
   let toValidateInputs = Array.prototype.slice.call(document.querySelectorAll("[data-validate]"));
-  console.log(toValidateInputs);
-  // let validateOutputs = toValidateInputs.forEach(sortToValidationMethod);
+
   let validateOutputs = toValidateInputs.filter(sortToValidationMethod);
-console.log(validateOutputs);
+  return validateOutputs;
 };
 
-function findSelectValidate() {
-  let selectInput = document.getElementById("day").value;
-  console.log(selectInput)
-};
-
-// function validate(inputElement) {
-//   let inputToRegex = inputElement.dataset.validate;
-//
-//   console.log(inputToRegex)
-// }
-//
-// findInputstoValidate();
 
 function sortToValidationMethod(element) {
 
-  // let validationData = element.dataset.validate;
- let validationDatas = ['name', 'pesel'];
+  let validationDatas = element.dataset.validate.split(",");
 
-  var y = validateRules.filter(filterValidation)
-    .map(rule => {return !validateInput(element.value, rule.regex)})
-    .reduce(makeOne);
-
-function filterValidation(rule){
-  return validationDatas.filter(validationData => {if(rule.name === validationData) { console.log(rule); return rule}})
+  var y = validationDatas.map(validationData => validateRules.filter(validationRule => validationRule.name === validationData));
+  var x = [].concat.apply([],y);
+  var v = x.map(rule => {
+        if(rule.name === "day"){
+          return  validateDayOfWeek(element.value)
+        }
+        return validateInput(element.value, rule.regex)})
+      .reduce(makeOne)
+    var d = chageToReverse(v);
+  return d;
 };
+
+function chageToReverse(state) {
+  if(state === true) {
+    return false
+  } return true
+};
+
 
 function makeOne(prev, next) {
-  return prev + next
-// if(prev === true && next === true) {
-//   return true
-// } else if(prev === true && next === false) {
-//   return false
-// } else if(prev === false && next === false) {
-//   return false
-// }
+  if (prev === false || next === false) {
+      return false
+    }
+    return true
 };
 
-  console.log(y);
-  // if( validationData === 'name') {
-  //   return !validateName(element.value);}
-  //   // let x = validateName(element.value);
-  //   // console.log(x);
-  // if( validationData === 'pesel') {
-  //   return  !validatePesel(element.value);}
-  //   // let x = validatePesel(element.value);
-  //   // console.log(x);
-  // // if (element === 'name') { return validateDate(element)}
-  // // if (element === 'pesel') {return}
-  // if( validationData === 'date') {
-  //   return !validateDate(element.value)}
-  //   // let x = validateDate(element.value);
-  //   // console.log(x);
-  // if(validationData === 'day') {
-  //   return !validateDay(element.value);
-  // }
-}
-
 function validateInput(input, regularExpresion) {
-  console.log(input, regularExpresion);
   return input.match(regularExpresion) != null;
 };
 
-function validateDay(day) {
-  let today = new Date();
-  var x = today.getDay();
-  console.log(x);
-  console.log(day);
-  return day === today.getDay();
-}
-});
+function validateDayOfWeek(day) {
+  return day === weekDaysPl
+                    .filter(weekDay => {
+                       if(weekDay.number === new Date().getDay()){
+                         return  weekDay.name
+                       }
+                     })
+                     .map(weekDay => weekDay.name)
+                     .reduce(weekDay => weekDay);
+};
