@@ -29,7 +29,7 @@ let weekDaysPl = [
 ];
 let validationArray = [];
 
-function validationLibrabry(formId){
+function validationLibrary(formId){
   validationArray = manageValidation(formId);
   if(validationArray.length !== 0){
     event.preventDefault();
@@ -47,14 +47,14 @@ function sortToValidationMethod(element) {
 
   let validationDatas = element.dataset.validate.split(",");
 
-  var chosenValidationRules = validationDatas.map(validationData => validRules
+  let chosenValidationRules = validationDatas.map(validationData => validRules
     .filter(validRule => validRule.name === validationData));
 
-  var chosenRules = [].concat.apply([],chosenValidationRules);
+  let chosenRules = [].concat.apply([],chosenValidationRules);
 
-  var isValid = chosenRules.map(rule =>
-    rule.name === "day" ? validateDayOfWeek(element.value) : validateInput(element.value, rule.regex))
-    .reduce(makeOne);
+  let isValid = chosenRules.map(rule =>
+      rule.name === "day" ? validateDayOfWeek(element.value) : validateInput(element.value, rule.regex))
+      .reduce(makeOne)
 
   return changeToReverse(isValid);
 };
@@ -82,7 +82,7 @@ function validateInput(input, regularExpresion) {
 // Function to validate day of week
 function validateDayOfWeek(day) {
   return day === weekDaysPl
-                .filter(weekDay => weekDay.number === new Date().getDay())
-                 .map(weekDay => weekDay.name)
-                 .reduce(weekDay => weekDay);
+                    .filter(weekDay => weekDay.number === new Date().getDay())
+                     .map(weekDay => weekDay.name)
+                     .reduce(weekDay => weekDay);
 };

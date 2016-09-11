@@ -22,7 +22,7 @@ submit:
 The form has to have id attribute and event on submit. Inside of the EventListener callback function is necessary to put the function validateLibrabry("formid") eg.:
 
 document.getElementById("personal-info").addEventListener("submit", function(event){
-  validationLibrabry("personal-info");
+  validationLibrary("personal-info");
   console.log(validationArray);
 });
 

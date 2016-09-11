@@ -2,12 +2,12 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
   document.getElementById("personal-info").addEventListener("submit", function(event){
-    validationLibrabry("personal-info");
+    validationLibrary("personal-info");
     console.log(validationArray);
   });
 
   document.getElementById("user-age").addEventListener("submit", function(event){
-    validationLibrabry("user-age");
+    validationLibrary("user-age");
     console.log(validationArray);
   });
 });
