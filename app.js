@@ -1,8 +1,13 @@
+// Demo to validation librabry
 document.addEventListener("DOMContentLoaded", function(event) {
 
-  let submitForm = document.querySelector("[data-validationForm]");
-  submitForm.addEventListener("submit", function(event){
-    validateLibrabry();
+  document.getElementById("personal-info").addEventListener("submit", function(event){
+    validationLibrabry("personal-info");
+    console.log(validationArray);
+  });
+
+  document.getElementById("user-age").addEventListener("submit", function(event){
+    validationLibrabry("user-age");
     console.log(validationArray);
   });
 });
